@@ -16,7 +16,7 @@ bool UMyUserWidget::Initialize()
 
     if (WidgetText)
     {
-        WidgetText->SetText(FText::FromString("Poop"));
+        WidgetText->SetText(FText::FromString("Text"));
     }
 }
 void UMyUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

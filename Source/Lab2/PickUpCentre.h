@@ -15,6 +15,10 @@ public:
 	// Sets default values for this actor's properties
 	APickUpCentre();
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UStaticMeshComponent* Mesh;
+	void SetNewGrenades(int& Grenades);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

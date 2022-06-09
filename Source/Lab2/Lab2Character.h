@@ -69,6 +69,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AGrenade> Grenade;
 	void ThrowGrenade();
 	void Interact();

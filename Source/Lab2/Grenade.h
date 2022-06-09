@@ -35,6 +35,12 @@ public:
 
 	void Explode();
 
+	bool IsSticking = false;
 
+	FVector pos;
+
+
+	UPROPERTY(EditAnywhere, Category = "Particle")
+		UParticleSystem* ParticleSystem;
 
 };

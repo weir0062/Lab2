@@ -71,6 +71,7 @@ ALab2Character::ALab2Character()
 
 	TextComponent = CreateDefaultSubobject<UTextRenderComponent>("Text");
 	TextComponent->SetRelativeLocation(TextComponent->GetRelativeLocation() + GetActorUpVector() * 100);
+	TextComponent->SetTextRenderColor(FColor::Purple);
 	TextComponent->SetupAttachment(RootComponent);
 }
 
@@ -88,6 +89,7 @@ void ALab2Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &ALab2Character::MoveRight);
 
 	PlayerInputComponent->BindAction("Grenade", IE_Pressed, this, &ALab2Character::ThrowGrenade);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ALab2Character::Interact);
 
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
@@ -172,13 +174,41 @@ void ALab2Character::MoveRight(float Value)
 
 void ALab2Character::ThrowGrenade()
 {
+	if (NumGrenades > 0)
+	{
+
 	UWorld* world = GetWorld();
-	FVector StartPos = GetActorLocation();
+	FVector offset = ((GetActorUpVector() + 50) + (GetActorRightVector() - 70) + (GetActorForwardVector() + 125));
+	FVector StartPos = GetActorLocation() + offset;
+	
 	FRotator StartRot = GetActorRotation();
 	world->SpawnActor(Grenade, &StartPos, &StartRot);
 	NumGrenades--;
+	}
 }
 
 void ALab2Character::Interact()
 {
+
+	FHitResult  Hit;
+	FVector Start = GetActorLocation();
+	FVector End = (GetActorForwardVector() * 10000) + Start;
+	FCollisionQueryParams CollisionParams;
+
+
+
+	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, CollisionParams))
+	{
+		AActor* actor = Hit.GetActor();
+
+
+
+		if (actor->IsA<APickUpCentre>() || actor->ActorHasTag("PuzzlePiece"))
+		{
+
+			APickUpCentre* pickup = Cast<APickUpCentre>(actor);
+			pickup->SetNewGrenades(NumGrenades);
+		}
+
+	}
 }
